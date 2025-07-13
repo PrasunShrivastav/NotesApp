@@ -53,3 +53,18 @@ export async function deleteNotes(req, res) {
     res.status(500).json({ message: "Error Updating Note", error });
   }
 }
+export async function getNote(req, res) {
+  try {
+    const id = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid note ID format" });
+    }
+    const note = await Note.findById(id);
+    if (!note) {
+      res.status(404);
+    }
+    res.status(200).json(note);
+  } catch (error) {
+    res.status(500).json({ message: "Error Updating Note", error });
+  }
+}

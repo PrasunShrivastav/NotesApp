@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../lib/api";
 import toast from "react-hot-toast";
-import { Loader } from "lucide-react";
+import { LoaderIcon } from "lucide-react";
 
 import Navbar from "../components/Navbar";
 import RateLimited from "../components/RateLimited";
@@ -39,7 +39,7 @@ const HomePage = () => {
         {isLoading && (
           <div className="text-center text-primary py-10 flex flex-col items-center">
             Loading Notes....
-            <Loader className="size-10 text-primary " />
+            <LoaderIcon className="animate-spin size-10" />
           </div>
         )}
       </div>
