@@ -65,6 +65,6 @@ export async function getNote(req, res) {
     }
     res.status(200).json(note);
   } catch (error) {
-    res.status(500).json({ message: "Error Updating Note", error });
+    res.status(500).json({ message: "Error fetching Note", error });
   }
 }

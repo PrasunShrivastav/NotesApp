@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
-import { LoaderIcon } from "lucide-react";
+import { useNavigate, useParams, Link } from "react-router";
+import { LoaderIcon, ArrowLeftIcon, Trash2Icon } from "lucide-react";
 import toast from "react-hot-toast";
 import api from "../lib/api"
 
@@ -25,6 +25,32 @@ const NoteDetailPage = () => {
     }
     getNote();
   }, [])
+  async function handleSave() {
+    if (!note.title.trim() || !note.content.trim()) {
+      toast.error("Please fill in the title and content");
+      return;
+    }
+    setSubmit(true);
+    try {
+      await api.put(`/notes/${id}`, note);
+      toast.success("Note updated successfully");
+    } catch (error) {
+      console.log(e)
+      toast.error("Failed to update the note");
+    }
+  }
+
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this note?")) return;
+    try {
+      const res = await api.delete(`/notes/${id}`);
+      toast.success("The Note has been deleted");
+      navigate("/");
+    } catch (e) {
+      console.error(error);
+      toast.error("Failed to the note");
+    }
+  }
   if (loading) {
     return (
       <div className="min-h-screen bg-base-200 flex items-center justify-center">
@@ -32,7 +58,53 @@ const NoteDetailPage = () => {
       </div>
     );
   }
-  return (<div>
+  return (<div className="min-h-screen bg-base-200">
+    <div className="container mx-auto px-4 py-8 ">
+      <div className="max-w-2xl mx-auto">
+        <div classname="flex items-center justify-between mb-6">
+          <Link to="/" className="btn btn-ghost">
+            <ArrowLeftIcon className="h-5 w-5" />
+            Back to Notes</Link>
+          <button className="btn btn-error btn-outline" onClick={handleDelete}>
+            <Trash2Icon classname="w-5 h-5" />
+            Delete Note
+          </button>
+        </div>
+        <div className="card bg-base-100">
+          <div className="card-body">
+            <div className="form-control mb-4">
+              <label className="label">
+                <span className="label-text">Title</span>
+              </label>
+              <input
+                type="text"
+                placeholder="Note title"
+                className="input input-bordered"
+                value={note.title}
+                onChange={(e) => setNotes({ ...note, title: e.target.value })}
+              />
+            </div>
+            <div className="form-control mb-4">
+              <label className="label">
+                <span className="label-text">Content</span>
+              </label>
+              <textarea
+                placeholder="Write your note here..."
+                className="textarea textarea-bordered h-32"
+                value={note.description}
+                onChange={(e) => setNotes({ ...note, description: e.target.value })}
+              />
+            </div>
+            <div className="card-actions justify-end">
+              <button className="btn btn-primary" disabled={submit} onClick={handleSave}>
+                {submit ? "Saving..." : "Save Changes"}
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
 
   </div>);
 };
