@@ -17,10 +17,20 @@ app.use(express.json());
 app.use("/api/notes", notesRouter);
 // Static files and SPA routing only in production
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  app.use(
+    express.static(path.join(__dirname, "../frontend/dist"), {
+      index: false, // Don't automatically serve index.html
+    })
+  );
 
-  app.get("*", (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+  // Manual fallback for SPA routing
+  app.use((req, res, next) => {
+    // If it's an API route, skip
+    if (req.path.startsWith("/api/")) {
+      return next();
+    }
+    // For all other routes, serve index.html
+    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
   });
 }
 connectDB().then(() => {
