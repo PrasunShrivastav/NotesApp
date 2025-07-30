@@ -25,7 +25,7 @@ const NoteDetailPage = () => {
     }
     getNote();
   }, [])
-  async function handleSave() {
+  handleSave = async () => {
     if (!note.title.trim() || !note.content.trim()) {
       toast.error("Please fill in the title and content");
       return;
