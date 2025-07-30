@@ -34,6 +34,7 @@ const NoteDetailPage = () => {
     try {
       await api.put(`/notes/${id}`, note);
       toast.success("Note updated successfully");
+      navigate("/");
     } catch (error) {
       console.log(e)
       toast.error("Failed to update the note");
