@@ -1,0 +1,7 @@
+import mongoose, { Types } from "mongoose";
+const userSchema = new mongoose.Schema({
+    username : {type : String , unique : true , required : true },
+    password : {type :String  ,  required : true }
+})
+const User = new mongoose.model("User" , userSchema) 
+export default User ; 
